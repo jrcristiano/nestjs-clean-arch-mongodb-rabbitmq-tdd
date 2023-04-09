@@ -1,10 +1,16 @@
 import { Injectable } from '@nestjs/common';
 import { User } from 'src/@core/domain/entities/users/user.entity';
-import { UserRepository } from 'src/@core/infra/databases/mongodb/repositories/user.repository';
+import { UserRepository } from 'src/@core/infra/databases/mongodb/repositories/users/user.repository';
+import { RabbitmqService } from '../rabbitmq/rabbitmq.service';
 
 @Injectable()
 export class UserService {
-	constructor(private readonly userRepository: UserRepository) {}
+	private readonly QUEUE_NAME = 'users_queue';
+
+	constructor(
+		private readonly userRepository: UserRepository,
+		private readonly rabbitmqService?: RabbitmqService,
+	) {}
 
 	async getAll() {
 		return await this.userRepository.getAll();
@@ -19,10 +25,20 @@ export class UserService {
 	}
 
 	async create(data: User) {
+		await this.rabbitmqService.publishInQueue(
+			this.QUEUE_NAME,
+			JSON.stringify(data),
+		);
+
 		return await this.userRepository.create(data);
 	}
 
 	async update(id: string, data: User) {
+		await this.rabbitmqService.publishInQueue(
+			this.QUEUE_NAME,
+			JSON.stringify(data),
+		);
+
 		return await this.userRepository.update(id, data);
 	}
 

@@ -1,6 +1,6 @@
 import { UpdateUserDto } from '../../dto/requests/users/update-user.dto';
 import { User } from 'src/@core/domain/entities/users/user.entity';
-import { UserService } from '../../services/user.service';
+import { UserService } from '../../services/users/user.service';
 
 export class UpdateUserUseCase {
 	constructor(private readonly userService: UserService) {}

@@ -5,13 +5,13 @@ import { AuthController } from 'src/@core/presentation/controllers/auth/auth.con
 import { JwtModule } from '@nestjs/jwt';
 import { env } from 'process';
 import { FindByEmailUseCase } from 'src/@core/application/use-cases/users/find-by-email.usecase';
-import { UserRepository } from 'src/@core/infra/databases/mongodb/repositories/user.repository';
+import { UserRepository } from 'src/@core/infra/databases/mongodb/repositories/users/user.repository';
 import { AuthorizationStrategy } from './strategies/authorization/authorization.strategy';
 import { AuthenticationStrategy } from './strategies/authentication/authentication.strategy';
 import { JwtService } from '@nestjs/jwt';
-import { UserService } from 'src/@core/application/services/user.service';
+import { UserService } from 'src/@core/application/services/users/user.service';
 import { MongooseModule } from '@nestjs/mongoose';
-import User from 'src/@core/infra/databases/mongodb/schemas/user.schema';
+import User from 'src/@core/infra/databases/mongodb/schemas/users/user.schema';
 
 @Module({
 	imports: [
@@ -31,8 +31,14 @@ import User from 'src/@core/infra/databases/mongodb/schemas/user.schema';
 	providers: [
 		AuthenticationStrategy,
 		AuthorizationStrategy,
-		UserService,
 		UserRepository,
+		{
+			provide: UserService,
+			useFactory: (userRepository: UserRepository) => {
+				return new UserService(userRepository);
+			},
+			inject: [UserRepository],
+		},
 		{
 			provide: LoginUseCase,
 			useFactory: (userService: UserService, jwtService: JwtService) => {

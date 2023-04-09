@@ -2,8 +2,8 @@ import { JwtService } from '@nestjs/jwt';
 import { env } from 'process';
 import { AccessTokenResponseDto } from '../../dto/responses/jwt/access-token-response.dto';
 import { UserResponseDto } from '../../dto/responses/users/user.dto';
-import { comparePassword } from 'src/@core/domain/value-objects/password-hash/password-hash.value-object';
-import { UserService } from '../../services/user.service';
+import { comparePassword } from 'src/@core/infra/utils/password-hash/password-hash.util';
+import { UserService } from '../../services/users/user.service';
 
 export class LoginUseCase {
 	constructor(

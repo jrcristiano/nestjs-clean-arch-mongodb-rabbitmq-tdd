@@ -6,8 +6,9 @@ import {
 	Param,
 	Post,
 	Put,
+	// Req,
 	Res,
-	UseGuards,
+	// UseGuards,
 } from '@nestjs/common/decorators';
 import { CreateUserDto } from 'src/@core/application/dto/requests/users/create-user.dto';
 import { UpdateUserDto } from 'src/@core/application/dto/requests/users/update-user.dto';
@@ -17,8 +18,8 @@ import { FindByIdUseCase } from 'src/@core/application/use-cases/users/find-by-i
 import { GetAllUseCase } from 'src/@core/application/use-cases/users/get-all.usecase';
 import { UpdateUserUseCase } from 'src/@core/application/use-cases/users/update-user.usecase';
 import { HttpStatus } from '@nestjs/common/enums';
-import { Response } from 'express';
-import { AuthorizationGuard } from 'src/@core/infra/frameworks/nestjs/modules/auth/guards/authorization/authorization.guard';
+import { Request, Response } from 'express';
+// import { AuthorizationGuard } from 'src/@core/infra/frameworks/nestjs/modules/auth/guards/authorization/authorization.guard';
 
 @Controller('users')
 export class UsersController {
@@ -31,7 +32,7 @@ export class UsersController {
 	) {}
 
 	@Get()
-	@UseGuards(AuthorizationGuard)
+	// @UseGuards(AuthorizationGuard)
 	async index(@Res() res: Response) {
 		try {
 			const data = await this.getAllUseCase.execute();
@@ -46,7 +47,7 @@ export class UsersController {
 	}
 
 	@Get(':id')
-	@UseGuards(AuthorizationGuard)
+	// @UseGuards(AuthorizationGuard)
 	async show(@Param('id') id: string, @Res() res: Response) {
 		try {
 			const data = await this.findByIdUseCase.execute(id);
@@ -61,7 +62,7 @@ export class UsersController {
 	}
 
 	@Post()
-	@UseGuards(AuthorizationGuard)
+	// @UseGuards(AuthorizationGuard)
 	async store(@Body() createUserDto: CreateUserDto, @Res() res: Response) {
 		try {
 			await this.createUserUseCase.execute(createUserDto);
@@ -76,7 +77,7 @@ export class UsersController {
 	}
 
 	@Put(':id')
-	@UseGuards(AuthorizationGuard)
+	// @UseGuards(AuthorizationGuard)
 	async update(
 		@Param('id') id: string,
 		@Body() updateUserDto: UpdateUserDto,
@@ -92,7 +93,7 @@ export class UsersController {
 	}
 
 	@Delete(':id')
-	@UseGuards(AuthorizationGuard)
+	// @UseGuards(AuthorizationGuard)
 	async destroy(@Param('id') id: string, @Res() res: Response) {
 		try {
 			return await this.destroyUserUseCase.execute(id);

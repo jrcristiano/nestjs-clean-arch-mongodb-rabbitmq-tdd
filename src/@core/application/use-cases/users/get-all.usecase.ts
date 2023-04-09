@@ -1,4 +1,4 @@
-import { UserService } from '../../services/user.service';
+import { UserService } from '../../services/users/user.service';
 
 export class GetAllUseCase {
 	constructor(private readonly userService: UserService) {}
