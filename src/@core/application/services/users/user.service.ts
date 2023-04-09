@@ -25,24 +25,35 @@ export class UserService {
 	}
 
 	async create(data: User) {
+		const createUser = { ...data, action: 'CREATE_USER' };
+
 		await this.rabbitmqService.publishInQueue(
 			this.QUEUE_NAME,
-			JSON.stringify(data),
+			JSON.stringify(createUser),
 		);
 
 		return await this.userRepository.create(data);
 	}
 
 	async update(id: string, data: User) {
+		const updateUser = { ...data, action: 'UPDATE_USER' };
+
 		await this.rabbitmqService.publishInQueue(
 			this.QUEUE_NAME,
-			JSON.stringify(data),
+			JSON.stringify(updateUser),
 		);
 
 		return await this.userRepository.update(id, data);
 	}
 
 	async destroy(id: string) {
+		const deleteUser = { id, action: 'DELETE_USER' };
+
+		await this.rabbitmqService.publishInQueue(
+			this.QUEUE_NAME,
+			JSON.stringify(deleteUser),
+		);
+
 		return await this.userRepository.destroy(id);
 	}
 }
